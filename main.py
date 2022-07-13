@@ -212,6 +212,7 @@ if __name__ == "__main__":
             rotor_list[idx] = turn_rotor(rotor_list[idx], offset_count[idx])
 
         rev_rotor_list = generate_rev(rotor_list)
+        keyboard.config(state='normal')
 
     rotor_list_txt_ori = ["I", "II", "III", "IV", "V"]
     # rotor_list_txt = rotor_list_txt_ori
@@ -329,7 +330,8 @@ if __name__ == "__main__":
             except KeyError:
                 pass
             try:
-                light_bulb[light_bulb['is_on']].config(background="#F0F0F0")
+                if out_msg[-1] != light_bulb['is_on']:
+                    light_bulb[light_bulb['is_on']].config(background="#F0F0F0")
             except KeyError:
                 pass
             light_bulb['is_on'] = out_msg[-1]
@@ -341,7 +343,7 @@ if __name__ == "__main__":
             print(''.join(out_msg))
         except IndexError:
             for item in list(light_bulb.keys())[:-1]:
-                light_bulb[light_bulb['is_on']].config(background="#F0F0F0")
+                light_bulb[item].config(background="#F0F0F0")
             out_msg = []
 
         # print ("{}".format(keyboard.get("1.0", END)[-2]))
@@ -352,6 +354,7 @@ if __name__ == "__main__":
     keyboard = Text(root, width=40, height=4)
     keyboard.grid(row=2, column=0)
     keyboard.bind('<KeyRelease>', txt_var_callback)
+    keyboard.config(state='disabled')
 
     plugboard = PlugboardFrame(root)
     plugboard.grid(row=3, column=0)
