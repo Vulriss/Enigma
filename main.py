@@ -189,6 +189,12 @@ if __name__ == "__main__":
                 rev_rotor_list[idx][rotor_list[idx][i]] = i
         return rev_rotor_list
 
+    def generate_rev_sw(switch):
+        rotor_len = len(switch)
+        rev_list = [255] * rotor_len
+        for i in range(rotor_len):
+            rev_list[switch[i]] = i
+        return rev_list
 
     def turn_rotor(rotor, value):
         return rotor[value:] + rotor[0:value]
@@ -304,8 +310,15 @@ if __name__ == "__main__":
         try:
             key = keyboard.get("-1.0", END)[-2]
 
-            _temp = reflector[rotor_list[2][rotor_list[1][rotor_list[0][LETTER_DICO[key]]]]]
-            out_chr = rev_rotor_list[0][rev_rotor_list[1][rev_rotor_list[2][_temp]]]
+            _switch_plug = [x for x in range(26)]
+            for x in plugboard.active_link:
+                _switch_plug[LETTER_DICO[x[0].lower()]] = LETTER_DICO[x[1].lower()]
+                _switch_plug[LETTER_DICO[x[1].lower()]] = LETTER_DICO[x[0].lower()]
+
+            rev_switch_plug = generate_rev_sw(_switch_plug)
+
+            _temp = reflector[rotor_list[2][rotor_list[1][rotor_list[0][_switch_plug[LETTER_DICO[key]]]]]]
+            out_chr = rev_switch_plug[rev_rotor_list[0][rev_rotor_list[1][rev_rotor_list[2][_temp]]]]
             out_msg.append(LETTER_LST[out_chr])
 
             offset_count[0] += 1
